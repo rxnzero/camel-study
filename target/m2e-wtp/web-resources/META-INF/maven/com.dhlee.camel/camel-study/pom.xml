@@ -1,0 +1,249 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.dhlee.camel</groupId>
+  <artifactId>camel-study</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>camel-study Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+  
+  <properties>
+  	<maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  	<camel-version>2.18.2</camel-version> <!--   -->
+  	<log4j-version>2.7</log4j-version>
+  	<spring.version>4.1.0.RELEASE</spring.version> <!--   not supported CXF -->
+  	<commons-dbcp-version>1.4</commons-dbcp-version>
+  	<jackson.version>1.9.13</jackson.version>
+  	<cxf-version>2.7.18</cxf-version>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.camel</groupId>
+      <artifactId>camel-core</artifactId>
+      <version>${camel-version}</version>
+    </dependency>
+    
+	<dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-http4</artifactId>
+    	<version>${camel-version}</version>
+	</dependency>
+    
+    <dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-jdbc</artifactId>
+    	<version>${camel-version}</version>
+	</dependency>
+    
+    <dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-stream</artifactId>
+    	<version>${camel-version}</version>
+	</dependency>
+    
+    <dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-netty</artifactId>
+    	<version>${camel-version}</version>
+	</dependency>
+	
+	<dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-netty4</artifactId>
+    	<version>${camel-version}</version>
+	</dependency>
+	
+    <dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-xmljson</artifactId>
+    	<version>${camel-version}</version>
+	</dependency>
+    <dependency>
+  		<groupId>xom</groupId>
+  		<artifactId>xom</artifactId>
+  		<version>1.2.5</version>
+	</dependency>
+    
+    <!-- Camel CXF -->
+<!--     <dependency> -->
+<!--     	<groupId>org.apache.camel</groupId> -->
+<!--     	<artifactId>camel-spring</artifactId> -->
+<!--     	<version>${camel-version}</version> -->
+<!-- 	</dependency> -->
+	<dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-servlet</artifactId>
+    	<version>${camel-version}</version>
+	</dependency>
+	<dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-sql</artifactId>
+    	<version>${camel-version}</version>
+	</dependency>
+    <dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-cxf</artifactId>
+    	<version>${camel-version}</version>
+	</dependency>
+	<dependency>
+    	<groupId>org.apache.camel</groupId>
+    	<artifactId>camel-jackson</artifactId>
+    	<version>${camel-version}</version>
+	</dependency>
+	<dependency>
+    	<groupId>commons-dbcp</groupId>
+    	<artifactId>commons-dbcp</artifactId>
+    	<version>${commons-dbcp-version}</version>
+	</dependency>
+	
+	<dependency>
+		<groupId>org.codehaus.jackson</groupId>
+		<artifactId>jackson-jaxrs</artifactId>
+		<version>${jackson.version}</version>
+	</dependency>
+	<dependency>
+          <groupId>org.codehaus.jackson</groupId>
+          <artifactId>jackson-core-asl</artifactId>
+          <version>${jackson.version}</version>
+      </dependency>
+	
+	<dependency>
+  		<groupId>org.apache.camel</groupId>
+  		<artifactId>camel-bindy</artifactId>
+  		<version>${camel-version}</version>
+	</dependency>
+	
+	<dependency>
+  	<groupId>org.apache.camel</groupId>
+  		<artifactId>camel-xstream</artifactId>
+  		<version>${camel-version}</version>
+	</dependency>
+	
+	<dependency>
+  	<groupId>org.apache.camel</groupId>
+  		<artifactId>camel-gson</artifactId>
+  		<version>${camel-version}</version>
+	</dependency>
+	<dependency>
+  	<groupId>org.apache.camel</groupId>
+  		<artifactId>camel-castor</artifactId>
+  		<version>${camel-version}</version>
+	</dependency>
+	<dependency>
+  	<groupId>org.apache.camel</groupId>
+  		<artifactId>camel-xmlbeans</artifactId>
+  		<version>${camel-version}</version>
+	</dependency>
+	
+	<dependency>
+  		<groupId>org.apache.camel</groupId>
+  		<artifactId>camel-scala</artifactId>
+  		<version>${camel-version}</version>
+  		<!-- use the same version as your Camel core version -->
+	</dependency>
+	<dependency>
+  		<groupId>org.apache.camel</groupId>
+  		<artifactId>camel-test</artifactId>
+  		<version>${camel-version}</version>
+  		<scope>test</scope>
+	</dependency>
+	<dependency>
+  		<groupId>org.scala-lang</groupId>
+  		<artifactId>scala-library</artifactId>
+  		<version>2.12.1</version>
+	</dependency>
+	
+<!-- 	<dependency> -->
+<!--   		<groupId>org.slf4j</groupId> -->
+<!--   		<artifactId>slf4j-log4j12</artifactId> -->
+<!--   		<scope>test</scope> -->
+<!-- 	</dependency> -->
+<!-- 	<dependency> -->
+<!--   		<groupId>log4j</groupId> -->
+<!--   		<artifactId>log4j</artifactId> -->
+<!--   	<scope>test</scope> -->
+<!-- 	</dependency> -->
+	
+	
+    <!-- logging -->
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>${log4j-version}</version>
+      <scope>runtime</scope>
+      </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j-version}</version>
+      <scope>runtime</scope>
+      </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>${log4j-version}</version>
+      <scope>runtime</scope>      
+    </dependency>
+    
+<!-- duplication error occurred, commented other version of spring -->
+    <dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-core</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-context-support</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-web</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-aop</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework</groupId>
+		<artifactId>spring-beans</artifactId>
+		<version>${spring.version}</version>
+	</dependency>
+	
+<!-- 	<dependency> -->
+<!-- 		<groupId>org.springframework</groupId> -->
+<!-- 		<artifactId>spring-jdbc</artifactId> -->
+<!-- 		<version>${spring.version}</version> -->
+<!-- 	</dependency> -->
+	
+	<dependency>
+   		<groupId>org.mariadb.jdbc</groupId>
+   		<artifactId>mariadb-java-client</artifactId>
+   		<version>1.1.7</version>
+	</dependency>
+	
+		
+  </dependencies>
+
+  <build>
+  	
+    <finalName>camel-study</finalName>
+  </build>
+  <packaging>war</packaging>  
+</project>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	You under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camel="http://camel.apache.org/schema/spring"
+	xmlns:cxf="http://camel.apache.org/schema/cxf" xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+       		http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd
+           http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="org.mariadb.jdbc.Driver" />
+		<property name="url" value="jdbc:mariadb://localhost:4406/test" />
+		<property name="username" value="root" />
+		<property name="password" value="mariadb" />
+	</bean>
+
+	<bean id="sql" class="org.apache.camel.component.sql.SqlComponent">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="helloBean" class="com.dhlee.camel.cxf.HelloWorldResource" />
+	
+	<cxf:rsServer id="helloServer" address="/hellocxf"  loggingFeatureEnabled="true">
+		<cxf:serviceBeans>
+			<ref bean="helloBean" />
+		</cxf:serviceBeans>
+		<cxf:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+		</cxf:providers>
+	</cxf:rsServer>
+	
+	<bean id="userBean" class="com.dhlee.camel.cxf.UserServiceImpl" />
+	
+	<cxf:rsServer id="userServer" address="/usercxf"  loggingFeatureEnabled="true">
+		<cxf:serviceBeans>
+			<ref bean="userBean" />
+		</cxf:serviceBeans>
+		<cxf:providers>
+			<bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" />
+		</cxf:providers>
+	</cxf:rsServer>
+	 <!--  TEST URL : http://localhost:8080/camel-study/cxfservices/hellocxf/hello/greet -->
+	<camelContext id="context" xmlns="http://camel.apache.org/schema/spring">
+		<route>
+			<from uri="cxfrs:bean:helloServer"/>
+			<onCompletion> <!--   onFailureOnly="true" -->
+				<setHeader headerName="createdBy">
+    				<constant>rxnzero</constant>
+  				</setHeader>
+			 	<to uri="log:sync"/>
+			 </onCompletion>
+			<log message="Processing CXF route....http method ${header.CamelHttpMethod}" />
+			<log message="Processing CXF route....path is ${header.CamelHttpPath}" />
+			<log message="Processing CXF route....body is ${body}" />
+			<choice>
+				<when>
+					<simple>${header.operationName} == 'sayHello'</simple>
+					<to uri="direct:invokeSayHello" />
+				</when>
+				<when>
+					<simple>${header.operationName} == 'greet'</simple>
+					<to uri="direct:invokeGreet" />
+				</when>
+			</choice>
+		</route>
+	
+		<route id="invokeSayHello">
+			<from uri="direct:invokeSayHello" />
+			<bean ref="helloBean" method="sayHello" />
+		</route>
+
+		<route id="invokeGreet">
+			<from uri="direct:invokeGreet" />
+			<bean ref="helloBean" method="greet" />
+		</route>
+		
+		<!--  TEST URL : http://localhost:8080/camel-study/cxfservices/usercxf/userservice/user  -->
+		<route>
+			<from uri="cxfrs:bean:userServer?bindingStyle=SimpleConsumer"/>
+			 <onCompletion parallelProcessing="true" mode="BeforeConsumer">
+			 	<setHeader headerName="createdBy">
+    				<constant>rxnzero</constant>
+  				</setHeader>
+  				<to uri="log:sync"/>			 	
+			 </onCompletion>
+			 <log message="Processing CXF route....http method ${header.CamelHttpMethod}" />
+			<log message="Processing CXF route....path is ${header.CamelHttpPath}" />
+			<log message="Processing CXF route....body is ${body}" />
+			<choice>
+				<when>
+					<simple>${header.operationName} == 'getUser'</simple>
+					<to uri="sql:select * from user where id = :#id " />
+					<marshal><json library="Jackson"/></marshal>
+				</when>
+				<when>
+					<simple>${header.operationName} == 'getUsers'</simple>
+					<to uri="sql:select * from user" />
+					<marshal><json library="Jackson"/></marshal>
+				</when>
+			</choice>
+		</route>
+	</camelContext>
+
+</beans>
